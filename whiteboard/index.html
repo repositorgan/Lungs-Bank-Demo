@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Read in the latest metadata -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Wallet from Andy Kieckhefer</title>
+    <!-- Load Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the app */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #bda521;
+        }
+    </style>
+</head>
+
+<!-- Our method in action -->
+<body class="p-4 sm:p-8 min-h-screen flex items-start justify-center"> <!-- Container for the app -->
+    <div id="app" class="w-full max-w-xl bg-white shadow-2xl rounded-xl p-6 sm:p-8 space-y-6"> <!-- Main app container -->
+        <!-- Header -->
+        <h1 class="text-3xl font-extrabold text-gray-900 border-b pb-3 mb-4 flex items-center">
+            <svg class="w-8 h-8 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            Modern Money
+        </h1>
+
+        <!-- Total Cash Value Display -->
+        <div class="bg-indigo-600 text-white p-5 sm:p-6 rounded-lg shadow-lg"> <!-- Total Value Card -->
+            <p class="text-sm font-medium opacity-80">Minimum Wallet Value+ (USD)</p> <!-- Dollar value -->
+            <p id="total-value" class="text-4xl sm:text-5xl font-bold mt-1">$20.56</p> <!-- MG58689808F -->
+        </div>
+
+        <!-- Crypto List -->
+        <h2 class="text-xl font-semibold text-gray-800 pt-2">Diverse Market</h2>
+        <div id="crypto-list" class="space-y-4">
+            <!-- Coin data will be rendered here by JavaScript -->
+            <div id="loading" class="text-center p-6 text-gray-500">
+                <p>Updating live price data from CoinGecko...</p>
+            </div>
+        </div>
+
+        <!-- Attribution -->
+        <p class="text-xs text-gray-500 pt-4 text-center">
+            Powered by CoinGecko.
+        </p>
+    </div>
+    <!-- JavaScript to fetch and display crypto data -->
+    <script>
+        // Set the API endpoint for the coins we want to track
+        const COINGECKO_API_URL = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd';
+
+        // Simulated wallet: Define the coins held and the quantity
+        const MY_PORTFOLIO = [
+            { id: 'bitcoin', name: 'Bitcoin', symbol: 'BTC', quantity: 0.00016 },
+            { id: 'ethereum', name: 'Ethereum', symbol: 'ETH', quantity: 0.0000095 },
+            { id: 'coin', name: 'Coin', symbol: 'COIN', quantity: 50 }, // Placeholder for a custom coin
+            // Add more coins here if you wish (e.g., 'solana', 'dogecoin'), 
+            // but make sure to update the 'ids' in the API URL above!
+        ];
+        // Get references to DOM elements
+        const totalValueEl = document.getElementById('total-value');
+        const cryptoListEl = document.getElementById('crypto-list');
+        const loadingEl = document.getElementById('loading');
+
+        /**
+         * Formats a number into US dollar currency string.
+         * param {number} amount
+         * returns {string} Formatted currency string.
+         */
+        function formatCurrency(amount) { // special formatter for USD 
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+            }).format(amount);
+        }
+
+        /**
+         * Fetche current prices and renders the wallet value.
+         */
+        async function fetchAndRenderPortfolio() {
+            try {
+                // Show loading state
+                loadingEl.classList.remove('hidden');
+                cryptoListEl.innerHTML = ''; // Clear previous list
+
+                // 1. Fetch real-time prices from CoinGecko
+                const response = await fetch(COINGECKO_API_URL);
+                if (!response.ok) {
+                    throw new Error(`API returned status ${response.status}`);
+                }
+                const prices = await response.json(); // e.g., { bitcoin: { usd: 45000 }, ethereum: { usd: 3000 } }
+
+                let totalPortfolioValue = 0; // Initialize total value
+                let listHTML = ''; // Initialize HTML for the list
+
+                // 2. Iterate through the portfolio, calculate values, and build the list HTML
+                MY_PORTFOLIO.forEach(coin => {
+                    const priceData = prices[coin.id];
+                    // Check if we have price data for the coin
+                    if (priceData && priceData.usd) {
+                        const currentPrice = priceData.usd;
+                        const assetValue = coin.quantity * currentPrice;
+                        totalPortfolioValue += assetValue;
+
+                        // Create the HTML card for each coin
+                        listHTML += `
+                            <div class="flex justify-between items-center p-4 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition duration-150">
+                                <!-- Name and Symbol -->
+                                <div>
+                                    <p class="text-lg font-semibold text-gray-900">${coin.name} (${coin.symbol})</p>
+                                    <p class="text-sm text-gray-500">
+                                        Holding: <span class="font-mono text-gray-700">${coin.quantity.toFixed(6)}</span>
+                                    </p>
+                                </div>
+                                <!-- Value and Price -->
+                                <div class="text-right">
+                                    <p class="text-xl font-bold text-indigo-700">${formatCurrency(assetValue)}</p>
+                                    <p class="text-xs text-green-500">@ ${formatCurrency(currentPrice)}</p>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                         // Handle coins that might not be found in the API response
+                        listHTML += `
+                            <div class="p-4 bg-yellow-50 rounded-lg border border-yellow-200 text-yellow-800">
+                                May not release global price data for ${coin.name}.
+                            </div>
+                        `;
+                    }
+                });
+
+                // 3. Update the DOM with the calculated values
+                totalValueEl.textContent = formatCurrency(totalPortfolioValue);
+                cryptoListEl.innerHTML = listHTML;
+            // 4. Handle errors gracefully
+            } catch (error) {
+                console.error("Failed to fetch or process crypto data:", error);
+                totalValueEl.textContent = 'Error';
+                cryptoListEl.innerHTML = `
+                    <div class="p-4 bg-red-100 text-red-700 rounded-lg border border-red-300">
+                        <p class="font-bold">Error fetching data.</p>
+                        <p class="text-sm">Check your network connection or the API URL.</p>
+                    </div>
+                `;
+            // Hide the loading indicator
+            } finally {
+                
+                loadingEl.classList.add('hidden');
+            }
+        }
+
+        // Run the function when the page loads
+        window.onload = fetchAndRenderPortfolio;
+    </script>
+</body>
+</html>
