@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CoinsExtra - Digital Wallet</title>
+    <style>
+        /* Design System Tokens */
+        :root {
+            --color-bg: #F9F9FB;
+            --color-surface: #FFFFFF;
+            --color-text-primary: #000000;
+            --color-text-secondary: #666666;
+            --color-text-tertiary: #999999;
+            --color-accent: #007AFF;
+            --color-success: #34C759;
+            --color-error: #FF3B30;
+            --color-border: #E5E5EA;
+            --color-lottery: #FFD700;
+            --spacing-xs: 8px;
+            --spacing-sm: 12px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --radius-sm: 12px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+            background: var(--color-bg);
+            color: var(--color-text-primary);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Login Screen */
+        .login-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: var(--spacing-lg);
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 360px;
+        }
+
+        .logo-mark {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: var(--spacing-xs);
+            color: var(--color-text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .tagline {
+            text-align: center;
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .login-form {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .input-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        input {
+            width: 100%;
+            padding: var(--spacing-md);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--color-accent);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: var(--spacing-md);
+            background: var(--color-text-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-primary:active {
+            opacity: 0.8;
+        }
+
+        .demo-box {
+            background: #FFF9E6;
+            border: 1px solid #FFE066;
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            font-size: 0.85rem;
+        }
+
+        .demo-box strong {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .contact-links {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--color-text-tertiary);
+        }
+
+        .contact-links a {
+            color: var(--color-accent);
+            text-decoration: none;
+            margin: 0 var(--spacing-xs);
+        }
+
+        /* Main App */
+        .app-container {
+            display: none;
+            max-width: 428px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--color-bg);
+        }
+
+        /* Header */
+        .app-header {
+            background: var(--color-surface);
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .balance-section {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .balance-label {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .balance-amount {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .secondary-balance {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-md);
+            font-size: 0.9rem;
+        }
+
+        .secondary-balance-item {
+            color: var(--color-text-secondary);
+        }
+
+        .secondary-balance-item strong {
+            color: var(--color-text-primary);
+            font-weight: 600;
+        }
+
+        /* Primary Actions */
+        .primary-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+            padding: 0 var(--spacing-lg) var(--spacing-lg);
+            background: var(--color-surface);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: var(--spacing-md);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.2s;
+        }
+
+        .action-btn:active {
+            opacity: 0.8;
+        }
+
+        .action-primary {
+            background: var(--color-text-primary);
+            color: white;
+        }
+
+        .action-secondary {
+            background: #F0F0F5;
+            color: var(--color-text-primary);
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            background: var(--color-surface);
+            border-bottom: 1px solid var(--color-border);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .nav-tab {
+            flex: 1;
+            padding: var(--spacing-md);
+            text-align: center;
+            background: transparent;
+            border: none;
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+        }
+
+        .nav-tab.active {
+            color: var(--color-text-primary);
+        }
+
+        .nav-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--color-text-primary);
+        }
+
+        /* Content */
+        .content {
+            padding: var(--spacing-lg);
+            position: relative;
+        }
+
+        .tab-content {
+            display: none !important;
+        }
+
+        .tab-content.active {
+            display: block !important;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+        }
+
+        /* Wallet Opening Animation */
+        .wallet-container {
+            perspective: 1000px;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .wallet {
+            background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            animation: openWallet 2.5s ease-out;
+            position: relative;
+            color: white;
+        }
+
+        .wallet-interior {
+            background: transparent;
+        }
+
+        @keyframes openWallet {
+            0% { 
+                transform: rotateX(-60deg) scale(0.9);
+                opacity: 0;
+            }
+            40% {
+                transform: rotateX(-20deg) scale(0.95);
+                opacity: 0.7;
+            }
+            100% { 
+                transform: rotateX(0deg) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .wallet-brand {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.5);
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .wallet-title {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .wallet-section {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .wallet-section .section-title {
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .wallet-section .card {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--color-text-primary);
+        }
+
+        /* Lottery Feature */
+        .lottery-feature {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .lottery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .lottery-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .lottery-jackpot {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--color-lottery);
+        }
+
+        .lottery-numbers {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: var(--spacing-sm) 0;
+        }
+
+        .lottery-ball {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .lottery-meta {
+            font-size: 0.75rem;
+            color: var(--color-text-secondary);
+            text-align: center;
+        }
+
+        /* Card Component */
+        .card {
+            background: var(--color-surface);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .card:active {
+            background: #F5F5F7;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .card-content {
+            flex: 1;
+        }
+
+        .card-label {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .card-meta {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+        }
+
+        .card-value {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .card-value.positive {
+            color: var(--color-success);
+        }
+
+        .card-value.negative {
+            color: var(--color-error);
+        }
+
+        .card-graph {
+            height: 40px;
+            margin-top: var(--spacing-xs);
+        }
+
+        /* Portfolio */
+        .portfolio-header {
+            background: var(--color-text-primary);
+            color: white;
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .portfolio-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .portfolio-change {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Bills */
+        .bill-card {
+            background: var(--color-surface);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .bill-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .bill-vendor {
+            font-weight: 600;
+        }
+
+        .bill-amount {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .bill-due {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+        }
+
+        .autopay-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #E8F5E9;
+            color: var(--color-success);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: var(--spacing-xs);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            background: #F0F0F5;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: var(--spacing-sm);
+        }
+
+        /* Heatmap */
+        .heatmap-container {
+            background: var(--color-surface);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+
+        .heatmap-title {
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .heatmap-placeholder {
+            background: #F5F5F7;
+            height: 200px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text-tertiary);
+            font-size: 0.85rem;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .location-toggle {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+        }
+
+        .location-toggle input {
+            width: auto;
+        }
+
+        /* Trending Ticker */
+        .trending-ticker {
+            background: #FFF9E6;
+            border: 2px solid #FFE066;
+            border-radius: var(--radius-md);
+            padding: var(--spacing-sm) 0;
+            margin-bottom: var(--spacing-lg);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .ticker-content {
+            display: flex;
+            white-space: nowrap;
+            animation: scroll-ticker 15s linear infinite;
+        }
+
+        @keyframes scroll-ticker {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .ticker-item {
+            padding: 0 var(--spacing-lg);
+            font-size: 0.85rem;
+            color: #856404;
+            font-weight: 500;
+        }
+
+        .ticker-label {
+            font-weight: 700;
+            color: #664d03;
+            margin-right: var(--spacing-xs);
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: var(--spacing-xs);
+            color: var(--color-text-secondary);
+        }
+
+        /* Utility */
+        .text-center {
+            text-align: center;
+        }
+
+        .text-secondary {
+            color: var(--color-text-secondary);
+        }
+
+        .text-small {
+            font-size: 0.85rem;
+        }
+
+        .mt-lg {
+            margin-top: var(--spacing-lg);
+        }
+
+        .brand-mark {
+            position: fixed;
+            bottom: var(--spacing-lg);
+            right: var(--spacing-lg);
+            font-size: 0.65rem;
+            color: var(--color-text-tertiary);
+            letter-spacing: 2px;
+            font-weight: 700;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        @media (max-width: 428px) {
+            .balance-amount {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-screen" id="loginScreen">
+        <div class="login-container">
+            <div class="logo-mark">CoinsExtra</div>
+            <div class="tagline">Your unified wallet</div>
+            
+            <div class="login-form">
+                <div class="input-group">
+                    <input type="email" placeholder="Email" id="emailInput" value="demo@coinsextra.com">
+                </div>
+                <div class="input-group">
+                    <input type="password" placeholder="Password" id="passwordInput" value="demo123">
+                </div>
+                <button class="btn-primary" id="loginButton">Sign In</button>
+            </div>
+
+            <div class="demo-box">
+                <strong>Demo Access</strong>
+                <div>demo@coinsextra.com / demo123</div>
+            </div>
+
+            <div class="contact-links">
+                <a href="mailto:agent@coinsextra.com">Support</a>
+                <a href="mailto:coinsales@coinsextra.com">Sales</a>
+                <a href="mailto:coinsurance@coinsextra.com">Insurance</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div class="app-container" id="appContainer">
+        <!-- Header -->
+        <div class="app-header">
+            <div class="balance-section">
+                <div class="balance-label">Total Assets + Credit</div>
+                <div class="balance-amount">$14,147.56</div>
+                <div class="secondary-balance">
+                    <div class="secondary-balance-item">
+                        Cash: <strong>$1,234</strong>
+                    </div>
+                    <div class="secondary-balance-item">
+                        Credit: <strong>$4,457</strong>
+                    </div>
+                    <div class="secondary-balance-item">
+                        Invested: <strong>$8,456</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Primary Actions -->
+        <div class="primary-actions">
+            <button class="action-btn action-primary" id="sendBtn">Send</button>
+            <button class="action-btn action-secondary" id="requestBtn">Request</button>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="wallet">Wallet</button>
+            <button class="nav-tab" data-tab="portfolio">Portfolio</button>
+            <button class="nav-tab" data-tab="bills">Bills</button>
+        </div>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Wallet Tab -->
+            <div class="tab-content active" id="walletTab">
+                <div class="wallet-container">
+                    <div class="wallet">
+                        <div class="wallet-brand">COINSEXTRA</div>
+                        <div class="wallet-title">Your Wallet</div>
+                        
+                        <div class="lottery-feature">
+                            <div class="lottery-header">
+                                <div class="lottery-title">Powerball Jackpot</div>
+                                <div class="lottery-jackpot">$294M</div>
+                            </div>
+                            <div class="lottery-numbers">
+                                <div class="lottery-ball">12</div>
+                                <div class="lottery-ball">24</div>
+                                <div class="lottery-ball">36</div>
+                                <div class="lottery-ball">48</div>
+                                <div class="lottery-ball">52</div>
+                            </div>
+                            <div class="lottery-meta">Latest drawing results</div>
+                        </div>
+
+                        <div class="wallet-section">
+                            <div class="section-title">Payment Methods</div>
+                            
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-content">
+                                        <div class="card-label">Available Cash</div>
+                                        <div class="card-meta">Debit •••• 4532</div>
+                                    </div>
+                                    <div class="card-value">$1,234.56</div>
+                                </div>
+                                <canvas class="card-graph" id="cashGraph"></canvas>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-content">
+                                        <div class="card-label">Credit Card</div>
+                                        <div class="card-meta">•••• 8765</div>
+                                    </div>
+                                    <div class="card-value">$4,457 avail</div>
+                                </div>
+                                <canvas class="card-graph" id="creditGraph"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="wallet-section">
+                            <div class="section-title">Identity & Documents</div>
+                            
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-content">
+                                        <div class="card-label">Driver's License</div>
+                                        <div class="card-meta">Expires 12/2028</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-content">
+                                        <div class="card-label">Health Insurance</div>
+                                        <div class="card-meta">Blue Cross - $2,450 / $5,000 deductible</div>
+                                    </div>
+                                </div>
+                                <canvas class="card-graph" id="insuranceGraph"></canvas>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-content">
+                                        <div class="card-label">Military CAC</div>
+                                        <div class="card-meta">Active Duty</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="wallet-section">
+                            <div class="section-title">Gift Cards & More</div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-content">
+                                        <div class="card-label">Dunkin' Donuts</div>
+                                        <div class="card-meta">Gift Card</div>
+                                    </div>
+                                    <div class="card-value">$25.00</div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-content">
+                                        <div class="card-label">Library Card</div>
+                                        <div class="card-meta">Member since 2020</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="card-content">
+                                        <div class="card-label">CPR Certification</div>
+                                        <div class="card-meta">Valid until 06/2026</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Portfolio Tab -->
+            <div class="tab-content" id="portfolioTab">
+                <div class="portfolio-header">
+                    <div class="portfolio-value">$8,456.23</div>
+                    <div class="portfolio-change">+$234.56 (2.85%) today</div>
+                </div>
+
+                <div class="section-title">Stocks</div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-content">
+                            <div class="card-label">Tesla</div>
+                            <div class="card-meta">5 shares · $234.56 each</div>
+                        </div>
+                        <div class="card-value positive">+3.45%</div>
+                    </div>
+                    <canvas class="card-graph" id="tslaGraph"></canvas>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-content">
+                            <div class="card-label">Apple</div>
+                            <div class="card-meta">10 shares · $178.92 each</div>
+                        </div>
+                        <div class="card-value positive">+1.23%</div>
+                    </div>
+                    <canvas class="card-graph" id="aaplGraph"></canvas>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-content">
+                            <div class="card-label">NVIDIA</div>
+                            <div class="card-meta">3 shares · $495.34 each</div>
+                        </div>
+                        <div class="card-value negative">-0.87%</div>
+                    </div>
+                    <canvas class="card-graph" id="nvdaGraph"></canvas>
+                </div>
+
+                <div class="section-title mt-lg">Crypto</div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-content">
+                            <div class="card-label">Bitcoin</div>
+                            <div class="card-meta">0.085 BTC · $45,234 each</div>
+                        </div>
+                        <div class="card-value positive">+2.34%</div>
+                    </div>
+                    <canvas class="card-graph" id="btcGraph"></canvas>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-content">
+                            <div class="card-label">Ethereum</div>
+                            <div class="card-meta">0.65 ETH · $2,456 each</div>
+                        </div>
+                        <div class="card-value negative">-1.23%</div>
+                    </div>
+                    <canvas class="card-graph" id="ethGraph"></canvas>
+                </div>
+            </div>
+
+            <!-- Bills Tab -->
+            <div class="tab-content" id="billsTab">
+                <!-- Trending Ticker -->
+                <div class="trending-ticker">
+                    <div class="ticker-content">
+                        <span class="ticker-item"><span class="ticker-label">What's Trending:</span>AI Speculation</span>
+                        <span class="ticker-item"> Lady Gaga Tour</span>
+                        <span class="ticker-item"> Weather Alerts</span>
+                        <span class="ticker-item"> China Markets</span>
+                        <span class="ticker-item"> Bitcoin Rally</span>
+                        <span class="ticker-item"> Tech Earnings</span>
+                        <span class="ticker-item"><span class="ticker-label">What's Trending:</span>AI Revolution</span>
+                        <span class="ticker-item">_ Lady Gaga Tour</span>
+                        <span class="ticker-item">_ Weather Alerts</span>
+                        <span class="ticker-item">_ China Markets</span>
+                        <span class="ticker-item">_ NFL Playoffs</span>
+                        <span class="ticker-item">_ Bitcoin Rally</span>
+                        <span class="ticker-item">_ Tech Earnings</span>
+                    </div>
+                </div>
+
+                <div class="section-title">Upcoming Bills</div>
+
+                <div class="bill-card">
+                    <div class="bill-header">
+                        <div>
+                            <div class="bill-vendor">
+                                PG&E
+                                <span class="autopay-badge">AUTO-PAY</span>
+                            </div>
+                            <div class="bill-due">Next payment: Jan 15</div>
+                        </div>
+                        <div class="bill-amount">$127.45</div>
+                    </div>
+                </div>
+
+                <div class="bill-card">
+                    <div class="bill-header">
+                        <div>
+                            <div class="bill-vendor">Mercy Hospital</div>
+                            <div class="bill-due">Due: Jan 20</div>
+                        </div>
+                        <div class="bill-amount">$350.00</div>
+                    </div>
+                    <button class="btn-small">Setup Auto-Pay</button>
+                </div>
+
+                <div class="bill-card">
+                    <div class="bill-header">
+                        <div>
+                            <div class="bill-vendor">
+                                Credit Card
+                                <span class="autopay-badge">AUTO-PAY</span>
+                            </div>
+                            <div class="bill-due">Next payment: Jan 25</div>
+                        </div>
+                        <div class="bill-amount">$542.18</div>
+                    </div>
+                </div>
+
+                <div class="bill-card">
+                    <div class="bill-header">
+                        <div>
+                            <div class="bill-vendor">Spectrum Internet</div>
+                            <div class="bill-due">Due: Jan 10</div>
+                        </div>
+                        <div class="bill-amount">$79.99</div>
+                    </div>
+                    <button class="btn-small">Setup Auto-Pay</button>
+                </div>
+
+                <div class="heatmap-container">
+                    <div class="heatmap-title">Spending Heatmap</div>
+                    <div class="heatmap-placeholder">
+                        Interactive map showing regional spending patterns
+                    </div>
+                    <div class="location-toggle">
+                        <input type="checkbox" id="locationShare">
+                        <label for="locationShare">Enable location sharing to see spending data</label>
+                    </div>
+                </div>
+
+                <div class="text-center text-secondary text-small mt-lg">
+                    Demo mode - Connect licensed payment processor
+                </div>
+            </div>
+
+            <!-- Send Tab -->
+            <div class="tab-content" id="sendTab">
+                <div class="section-title">Send Money</div>
+                
+                <div class="form-group">
+                    <label class="form-label">Due Date</label>
+                    <input type="date">
+                </div>
+
+                <button class="btn-primary">Create Invoice</button>
+
+                <div class="text-center text-secondary text-small mt-lg">
+                    Generates professional invoice with payment link
+                </div>
+            </div>
+        </div>
+
+        <div class="brand-mark">COINSEXTRA</div>
+    </div>
+
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Login functionality
+            const loginButton = document.getElementById('loginButton');
+            const emailInput = document.getElementById('emailInput');
+            const passwordInput = document.getElementById('passwordInput');
+            
+            function handleLogin() {
+                const email = emailInput.value;
+                const password = passwordInput.value;
+                
+                if (email === 'demo@coinsextra.com' && password === 'demo123') {
+                    document.getElementById('loginScreen').style.display = 'none';
+                    document.getElementById('appContainer').style.display = 'block';
+                    
+                    // Draw all line graphs
+                    setTimeout(function() {
+                        drawLineGraph('cashGraph', [1150, 1180, 1200, 1220, 1210, 1234], '#34C759');
+                        drawLineGraph('creditGraph', [4200, 4300, 4350, 4400, 4420, 4457], '#007AFF');
+                        drawLineGraph('insuranceGraph', [0, 450, 890, 1200, 1850, 2450], '#FF9500', 5000);
+                        drawLineGraph('tslaGraph', [220, 225, 228, 230, 233, 235], '#34C759');
+                        drawLineGraph('aaplGraph', [175, 176, 177, 177.5, 178, 179], '#34C759');
+                        drawLineGraph('nvdaGraph', [505, 502, 500, 498, 496, 495], '#FF3B30');
+                        drawLineGraph('btcGraph', [43000, 43500, 44000, 44500, 45000, 45234], '#34C759');
+                        drawLineGraph('ethGraph', [2500, 2490, 2480, 2470, 2465, 2456], '#FF3B30');
+                    }, 500);
+                } else {
+                    alert('Use demo credentials:\ndemo@coinsextra.com / demo123');
+                }
+            }
+            
+            loginButton.addEventListener('click', handleLogin);
+            emailInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') handleLogin();
+            });
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') handleLogin();
+            });
+            
+            // Tab navigation
+            const navTabs = document.querySelectorAll('.nav-tab');
+            navTabs.forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    const tabName = this.getAttribute('data-tab');
+                    
+                    navTabs.forEach(function(t) {
+                        t.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    document.querySelectorAll('.tab-content').forEach(function(content) {
+                        content.classList.remove('active');
+                    });
+                    document.getElementById(tabName + 'Tab').classList.add('active');
+                });
+            });
+            
+            // Primary action buttons
+            const sendBtn = document.getElementById('sendBtn');
+            const requestBtn = document.getElementById('requestBtn');
+            
+            sendBtn.addEventL
