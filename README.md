@@ -10,4 +10,4 @@
 
 > Demo version of a web application wallet with features.
 
-> Java build of a mock bank account.
+> Build of a mock bank account.
