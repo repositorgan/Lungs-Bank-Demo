@@ -1,6 +1,6 @@
 # Lungs-Bank-Demo
 
-> Competitor to Apple Wallet and Cash.App
+> Breathing room for competitor to Apple Wallet and Cash.App
 
 > All encompassing digital wallet experience
 
