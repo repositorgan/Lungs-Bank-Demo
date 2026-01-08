@@ -13,3 +13,11 @@
 > Demo version of a web application wallet with features.
 
 > Build of a mock bank account.
+
+**Roadmap**
+
+> Secure sponsorship for product placement
+
+> Build entire web app
+
+> Gain access to payment vendor (i.e. a bank)
